@@ -4,6 +4,7 @@ project(main)
 add_executable(main
     src/main.cpp
     src/glad.c
+    src/WindowHandler/WindowHandler.cpp
 )
 
 include_directories(${PROJECT_NAME} dependencies/include)

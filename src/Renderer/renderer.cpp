@@ -13,7 +13,8 @@ Renderer::Renderer()
     };
     uint indicies[] = 
     {
-        0, 1, 2
+        0, 1, 3,
+        1, 2, 3
     };
     vertexCount = sizeof(indicies) / sizeof(indicies[0]);
 
@@ -28,12 +29,14 @@ Renderer::Renderer()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 32, (void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)3);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 32, (void*)12);
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 32, (void*)24);
+    glEnableVertexAttribArray(2);
 
-    loadTexture("../../assets/brick.jpg");
+    loadTexture("../assets/brick.jpg");
 
     shader.use(); // just to be safe
 }
@@ -48,6 +51,7 @@ void Renderer::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     shader.use();
+    glBindTexture(GL_TEXTURE_2D, Texture);
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);

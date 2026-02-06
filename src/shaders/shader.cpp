@@ -32,7 +32,6 @@ Shader::Shader(const char *vertPath, const char *fragPath)
     const char* vShaderCode = vertexCode.c_str();
     const char* fShaderCode = fragmentCode.c_str();
     logPass("Successfully read shader files!");
-    std::cout << "V shader: \n" << vertexCode << "\n\n" << "F shader: \n" << fragmentCode << "\n";
 
     //* Shader Compilation
     uint vertex, fragment;

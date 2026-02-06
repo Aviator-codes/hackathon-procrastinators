@@ -32,6 +32,7 @@ Shader::Shader(const char *vertPath, const char *fragPath)
     const char* vShaderCode = vertexCode.c_str();
     const char* fShaderCode = fragmentCode.c_str();
     logPass("Successfully read shader files!");
+    std::cout << "V shader: \n" << vertexCode << "\n\n" << "F shader: \n" << fragmentCode << "\n";
 
     //* Shader Compilation
     uint vertex, fragment;
@@ -78,6 +79,7 @@ Shader::Shader(const char *vertPath, const char *fragPath)
         sprintf(errLog, "Shader Linking Error : %s", infoLog);
         logError(errLog);
     }
+    logPass("Shaders Linked Successfully!");
 
     //* Cleanup
     glDeleteShader(vertex);

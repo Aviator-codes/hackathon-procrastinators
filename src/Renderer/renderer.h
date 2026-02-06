@@ -4,14 +4,14 @@
 #include "../shaders/shader.h"
 #include "../stb_image/stb_image.h"
 
-class Renderer
+struct Renderer
 {
-private:
-    Shader shader;
     uint VAO, VBO, EBO, Texture;
     uint vertexCount;
-    
-public:
+
+    float FOV = 70.0f;
+
+    Shader shader;
     Renderer();
     ~Renderer();
     void draw();

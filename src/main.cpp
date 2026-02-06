@@ -22,4 +22,3 @@ int main()
     WH.~WindowHandler();
     return EXIT_SUCCESS;
 }
-

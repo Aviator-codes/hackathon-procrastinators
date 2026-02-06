@@ -6,29 +6,32 @@ WindowHandler::WindowHandler()
 {
     if(!glfwInit())
     {
-        printf("[ERROR]: Failed to initialize GLFW!\n");
+        logError("Failed to initialize GLFW!");
         exit(EXIT_FAILURE);
     }
-
+    logPass("Initialized GLFW");
+    
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
+    
     window = glfwCreateWindow(WIN_W, WIN_H, "ATDE", NULL, NULL); // Arch Three Dimensional Engine
     if(window == NULL)
     {
-        printf("[ERROR]: Failed to create Window!\n");
+        logError("Failed to create Window!");
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
+    logPass("Created Window!");
     glfwMakeContextCurrent(window);
-
+    
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        printf("[ERROR]: Failed to initialise glad!\n");
+        logError("Failed to Initialize GLAD!");
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
+    logPass("Initialized GLAD!");
 
     glViewport(0, 0, WIN_W, WIN_H);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);

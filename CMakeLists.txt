@@ -6,6 +6,7 @@ add_executable(main
     src/glad.c
     src/WindowHandler/WindowHandler.cpp
     src/log/log.cpp
+    src/shaders/shader.cpp
 )
 
 include_directories(${PROJECT_NAME} dependencies/include)

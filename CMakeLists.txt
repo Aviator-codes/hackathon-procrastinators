@@ -7,6 +7,8 @@ add_executable(main
     src/WindowHandler/WindowHandler.cpp
     src/log/log.cpp
     src/shaders/shader.cpp
+    src/Renderer/renderer.cpp
+    src/stb_image/stb_image.cpp
 )
 
 include_directories(${PROJECT_NAME} dependencies/include)

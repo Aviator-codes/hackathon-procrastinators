@@ -48,6 +48,7 @@ int main()
         float dt = current_time - last_time;
         last_time = current_time;
         
+        printf(ANSI_RESET "%sFPS: %s%f\n%s", FG_MAGENTA, FG_RED, (1.0f/dt), ANSI_CLEAR);
         
         model = glm::rotate(model, dt * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
         projection = glm::perspective(Zoom, (float)WH.WIN_W / (float)WH.WIN_H, 0.1f, 100.0f);

@@ -77,15 +77,24 @@ void WindowHandler::processInput(Camera& camera, float dt)
         glClearColor(0.2f, 0.2980392f, 0.6627450980f, 1.0f);
     if(glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
         glClearColor(0.2f, 0.1f, 0.5f, 1.0f);
-    const float cameraSpeed = 2.0f * dt;
+    
+        const float cameraSpeed = 2.0f * dt;
+
+        glm::vec3 forwardXZ = glm::normalize( glm::vec3(camera.front.x, 0.0f, camera.front.z) );
+        glm::vec3 rightXZ = glm::normalize( glm::cross(forwardXZ, glm::vec3(0.0f, 1.0f, 0.0f)) );
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.pos += cameraSpeed * camera.front;
+        camera.pos += cameraSpeed * forwardXZ;
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.pos -= cameraSpeed * camera.front;
+        camera.pos -= cameraSpeed * forwardXZ;
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.pos -= glm::normalize(glm::cross(camera.front, camera.up)) * cameraSpeed;
+        camera.pos -= rightXZ * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.pos += glm::normalize(glm::cross(camera.front, camera.up)) * cameraSpeed;
+        camera.pos += rightXZ * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        camera.pos += cameraSpeed * camera.global_up;
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        camera.pos -= cameraSpeed * camera.global_up;
     
 }
 

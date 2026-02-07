@@ -1,5 +1,6 @@
 #pragma once
 #include "../config.h"
+#include "../camera/camera.h"
 
 // Handling Window and GLFW and GLAD inits
 struct WindowHandler
@@ -9,6 +10,6 @@ struct WindowHandler
 
     WindowHandler();
     ~WindowHandler();
-    void processInput();
+    void processInput(Camera& camera, float dt);
     GLFWwindow* get() const;
 };

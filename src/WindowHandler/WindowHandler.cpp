@@ -35,6 +35,7 @@ WindowHandler::WindowHandler()
 
     glViewport(0, 0, WIN_W, WIN_H);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSwapInterval(1);
 }
 
 WindowHandler::~WindowHandler()
@@ -53,8 +54,7 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 }
 
 
-
-void WindowHandler::processInput()
+void WindowHandler::processInput(Camera& camera, float dt)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
@@ -66,4 +66,14 @@ void WindowHandler::processInput()
         glClearColor(0.2f, 0.2980392f, 0.6627450980f, 1.0f);
     if(glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
         glClearColor(0.2f, 0.1f, 0.5f, 1.0f);
+    const float cameraSpeed = 2.0f * dt;
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.pos += cameraSpeed * camera.front;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.pos -= cameraSpeed * camera.front;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.pos -= glm::normalize(glm::cross(camera.front, camera.up)) * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.pos += glm::normalize(glm::cross(camera.front, camera.up)) * cameraSpeed;
+
 }

@@ -2,6 +2,8 @@
 #include "WindowHandler/WindowHandler.h"
 #include "shaders/shader.h"
 #include "Renderer/renderer.h"
+#include "camera/camera.h"
+
 
 int main()
 {
@@ -9,12 +11,14 @@ int main()
     
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glEnable(GL_DEPTH_TEST);
-
+    
     Renderer renderer = Renderer();
+    Camera camera = Camera();
+
 
     glm::mat4 model = glm::rotate(glm::mat4(1.0f), 0.009f * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
     glm::mat4 view = glm::mat4(1.0f);
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));    
+    view = camera.getView();    
     glm::mat4 projection = glm::mat4(1.0f);
     projection = glm::perspective(renderer.FOV, (float)WH.WIN_W / (float)WH.WIN_H, 0.1f, 100.0f);
     renderer.shader.setMat4("model", model);
@@ -46,7 +50,8 @@ int main()
 
         model = glm::rotate(model, dt * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
         renderer.shader.setMat4("model", model);
-        WH.processInput();
+        renderer.shader.setMat4("view", camera.getView());
+        WH.processInput(camera, dt);
 
         // Rendering
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -1,6 +1,12 @@
 #include "WindowHandler.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+
+float lastX = WindowHandler::WIN_W/2.0f;
+float lastY = WindowHandler::WIN_H/2.0f;
+
 
 WindowHandler::WindowHandler()
 {
@@ -32,9 +38,13 @@ WindowHandler::WindowHandler()
         exit(EXIT_FAILURE);
     }
     logPass("Initialized GLAD!");
-
+    
     glViewport(0, 0, WIN_W, WIN_H);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+    glfwSwapInterval(1);
 }
 
 WindowHandler::~WindowHandler()
@@ -53,8 +63,7 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 }
 
 
-
-void WindowHandler::processInput()
+void WindowHandler::processInput(Camera& camera, float dt)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
@@ -62,4 +71,76 @@ void WindowHandler::processInput()
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     if(glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    if(glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
+        glClearColor(0.1f, 0.3f, 0.2f, 1.0f);
+    if(glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+        glClearColor(0.2f, 0.2980392f, 0.6627450980f, 1.0f);
+    if(glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+        glClearColor(0.2f, 0.1f, 0.5f, 1.0f);
+    
+        const float cameraSpeed = 2.0f * dt;
+
+        glm::vec3 forwardXZ = glm::normalize( glm::vec3(camera.front.x, 0.0f, camera.front.z) );
+        glm::vec3 rightXZ = glm::normalize( glm::cross(forwardXZ, glm::vec3(0.0f, 1.0f, 0.0f)) );
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.pos += cameraSpeed * forwardXZ;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.pos -= cameraSpeed * forwardXZ;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.pos -= rightXZ * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.pos += rightXZ * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        camera.pos += cameraSpeed * camera.global_up;
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        camera.pos -= cameraSpeed * camera.global_up;
+    
+}
+
+double yaw = -90.0f, pitch = 0.0f;
+extern Camera camera;
+bool firstMouse = true;
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; // reversed: y ranges bottom to top
+    lastX = xpos;
+    lastY = ypos;
+
+    const float sensitivity = 0.1f;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    yaw += xoffset;
+    pitch += yoffset;
+    if(pitch > 89.0f)
+    pitch = 89.0f;
+    if(pitch < -89.0f)
+    pitch = -89.0f;
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    camera.front = glm::normalize(direction);
+}
+
+extern float Zoom;
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    Zoom += (float)yoffset;
+    if (Zoom < 20.0f)
+    Zoom = 20.0f;
+    if (Zoom > 90.0f)
+    Zoom = 90.0f;
 }

@@ -9,6 +9,7 @@ add_executable(main
     src/shaders/shader.cpp
     src/Renderer/renderer.cpp
     src/stb_image/stb_image.cpp
+    src/camera/camera.cpp
 )
 
 include_directories(${PROJECT_NAME} dependencies/include)

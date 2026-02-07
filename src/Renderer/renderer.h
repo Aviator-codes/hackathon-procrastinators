@@ -14,6 +14,6 @@ struct Renderer
     Shader shader;
     Renderer();
     ~Renderer();
-    void draw();
+    void draw(glm::vec3 positions[10]);
     void loadTexture(const char* TexFilePath);
 };

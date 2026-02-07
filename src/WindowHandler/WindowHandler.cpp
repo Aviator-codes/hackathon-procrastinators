@@ -62,4 +62,8 @@ void WindowHandler::processInput()
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     if(glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    if(glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+        glClearColor(0.2f, 0.2980392f, 0.6627450980f, 1.0f);
+    if(glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+        glClearColor(0.2f, 0.1f, 0.5f, 1.0f);
 }

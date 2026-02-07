@@ -4,6 +4,8 @@
 #include "Renderer/renderer.h"
 #include "camera/camera.h"
 
+Camera camera = Camera();
+float Zoom = 45.0f;
 
 int main()
 {
@@ -13,7 +15,6 @@ int main()
     glEnable(GL_DEPTH_TEST);
     
     Renderer renderer = Renderer();
-    Camera camera = Camera();
 
 
     glm::mat4 model = glm::rotate(glm::mat4(1.0f), 0.009f * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
@@ -24,7 +25,7 @@ int main()
     renderer.shader.setMat4("model", model);
     renderer.shader.setMat4("view", view);
     renderer.shader.setMat4("projection", projection);
-
+    
     glm::vec3 cubePositions[] = {       // random values
         glm::vec3( 0.0f, 0.0f, 0.0f),
         glm::vec3( 2.0f, 5.0f, -15.0f),
@@ -40,17 +41,19 @@ int main()
     
     float last_time = glfwGetTime();
     float dt = glfwGetTime() - last_time;
-
+    
     while(!glfwWindowShouldClose(WH.get()))
     {
         float current_time = glfwGetTime();
         float dt = current_time - last_time;
         last_time = current_time;
-
-
+        
+        
         model = glm::rotate(model, dt * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+        projection = glm::perspective(Zoom, (float)WH.WIN_W / (float)WH.WIN_H, 0.1f, 100.0f);
         renderer.shader.setMat4("model", model);
         renderer.shader.setMat4("view", camera.getView());
+        renderer.shader.setMat4("projection", projection);
         WH.processInput(camera, dt);
 
         // Rendering

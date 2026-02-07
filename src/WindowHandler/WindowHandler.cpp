@@ -34,7 +34,7 @@ WindowHandler::WindowHandler()
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         logError("Failed to Initialize GLAD!");
-        glfwTerminate();
+        glfwTerminate(); 
         exit(EXIT_FAILURE);
     }
     logPass("Initialized GLAD!");
